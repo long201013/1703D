@@ -1,45 +1,42 @@
 package day716;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.sql.Connection;
-
-import javax.naming.directory.InvalidSearchFilterException;
 
 public class StreamUtil {
 //批量关流	
-public static void colse(Closeable... cone){ 
-		cone.clone();
+public static void colse(Closeable... cone) throws IOException{ 
+	for (Closeable closeable : cone) {
+		closeable.close();
+	}
 	}
 //拷贝流
 public static void copy(InputStream src, OutputStream out, boolean isCloseInputStream, boolean isCloseOutputStream)  throws IOException{
-	if (isCloseOutputStream) {
-		colse(out);
+	
+	if (isCloseOutputStream==true&&out!=null) {
+		StreamUtil.colse(out);
 	}
-	if (isCloseInputStream) {
-		colse(src);
+	if (isCloseInputStream==true&&src!=null) {
+		StreamUtil.colse(src);
 	}
 	}
 //文件对象
 public static String readTextFile(InputStream src) throws IOException{
 	InputStreamReader isr=new InputStreamReader(src);
 	BufferedReader br=new BufferedReader(isr);
-	String s=null;
-	String x=null;
+	String s="";
+	String x="";
 	while((s=br.readLine())!=null){
 		x+=s;
 	}
-	copy(src, null, true, true);
+	StreamUtil.copy(src, null, true, true);
 	return x;
 	}
 
